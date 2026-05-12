@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análisis Cuantitativo de Palabras en PDFs</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+
+<h1>Análisis Cuantitativo de Palabras en PDFs</h1>
+<p class="subtitle">Frecuencia léxica · Coincidencias · Distribución comparativa</p>
+
+<div class="upload-row">
+  <div class="upload-box">
+    <label>PDF 1</label>
+    <input type="file" id="pdf1" accept=".pdf">
+  </div>
+  <div class="upload-box">
+    <label>PDF 2</label>
+    <input type="file" id="pdf2" accept=".pdf">
+  </div>
+</div>
+
+<button id="btn-analyze" onclick="analyze()">Analizar</button>
+
+<div id="loading">Procesando PDFs, por favor espera...</div>
+
+<div id="results">
+
+  <div class="tables-row">
+    <div class="card">
+      <h2 id="title1">Top 20 palabras — PDF 1</h2>
+      <table>
+        <thead><tr><th>#</th><th>Palabra</th><th>Frec.</th></tr></thead>
+        <tbody id="tbody1"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2 id="title2">Top 20 palabras — PDF 2</h2>
+      <table>
+        <thead><tr><th>#</th><th>Palabra</th><th>Frec.</th></tr></thead>
+        <tbody id="tbody2"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card common-card">
+    <h2>Top 10 palabras coincidentes</h2>
+    <table>
+      <thead><tr><th>#</th><th>Palabra</th><th>Frec. PDF 1</th><th>Frec. PDF 2</th></tr></thead>
+      <tbody id="tbody-common"></tbody>
+    </table>
+  </div>
+
+  <div class="card venn-card">
+    <h2>Diagrama de Venn</h2>
+    <div class="venn-wrapper">
+      <!--
+        ViewBox 0 0 600 320. Círculos: C1(200,160,r=150) C2(400,160,r=150)
+        Solapamiento: x=250..350 (100px). Intersección en x=300.
+        foreignObject verificados (todos los vértices dentro del/los círculo/s):
+          Izquierda : x=70..230,  y=95..225  → ∈C1, ∉C2
+          Centro    : x=270..330, y=100..220 → ∈C1 y ∈C2
+          Derecha   : x=370..530, y=95..225  → ∈C2, ∉C1
+      -->
+      <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="160" r="150" fill="#3a7bd5" fill-opacity="0.2" stroke="#3a7bd5" stroke-width="2"/>
+        <circle cx="400" cy="160" r="150" fill="#e05252" fill-opacity="0.2" stroke="#e05252" stroke-width="2"/>
+
+        <foreignObject x="70" y="95" width="160" height="130">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="venn-region">
+            <div class="venn-title" id="v-title1">PDF 1</div>
+            <div class="venn-words" id="v-words1"></div>
+          </div>
+        </foreignObject>
+
+        <foreignObject x="270" y="100" width="60" height="120">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="venn-region">
+            <div class="venn-title">Común</div>
+            <div class="venn-words" id="v-words-mid"></div>
+          </div>
+        </foreignObject>
+
+        <foreignObject x="370" y="95" width="160" height="130">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="venn-region">
+            <div class="venn-title" id="v-title2">PDF 2</div>
+            <div class="venn-words" id="v-words2"></div>
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card pct-card">
+    <div class="pct-number" id="pct-number">0%</div>
+    <div class="pct-label">de las palabras únicas totales son compartidas entre ambos PDFs</div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
