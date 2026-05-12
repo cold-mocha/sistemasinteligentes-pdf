@@ -154,3 +154,10 @@ tr:nth-child(even) td { background: #f8f9ff; }
   font-size: 14px;
   color: #666;
 }
+
+.pct-formula {
+  margin-top: 20px;
+  padding-top: 16px;
+  font-size: 12px;
+  color: #aaa;
+}
